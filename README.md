@@ -1,1 +1,1 @@
-#bolg
+#blog
