@@ -3,6 +3,10 @@ namespace app\boss\controller;
 
 class Base extends \think\Controller
 {
+	public $code    = 200;
+	public $message = 'success';
+	public $data    = [];
+
 	public function _initialize()
 	{
 		config('default_return_type','json');
@@ -12,16 +16,14 @@ class Base extends \think\Controller
 		header('Access-Control-Allow-Methods: OPTIONS,POST,GET');
 		if( !session('username') )
 		{
-			return ['code'=>404, 'message'=>'have no login'];
+			$this->code    = 404;
+			$this->message = 'have no login';
 		}
-		return ['code'=>200, 'message'=>'ok'];
+		$this->returnData();
 	}
 
-	public function test()
+	public function returnData()
 	{
-	}
-
-	public function index()
-	{
+		return ['code'=>$this->code, 'message'=>$this->message, 'data' => $this->data];
 	}
 }

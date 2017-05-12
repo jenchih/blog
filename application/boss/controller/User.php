@@ -6,27 +6,27 @@ class User extends Base
 {
 	public function loginvalid()
 	{
-		$return['code']    = 400;
-		$return['message'] = '账号或密码错误';
-		$username          = input('username','');
-		$pwd               = input('password','');
+		$this->code    = 400;
+		$this->message = '账号或密码错误';
+		$username      = input('username','');
+		$pwd           = input('password','');
 
 		$res = Db::table('admin')->where('username', $username)->find();
-		if( empty($res) ) return $return;
+		if( empty($res) ) $this->returnData();
 
 		if( $this->check_password($res['password'],config('pwd_cfg').$pwd) )
 		{
-			$return['code']    = 200;
-			$return['message'] = '登陆成功';
-			session('username', $username);
+			$this->code    = 200;
+			$this->message = '登陆成功';
+			$this->setSession( $username );
 		}
-		return $return;
+		$this->returnData();
 	}
 
 	public function logout()
 	{
 		\think\Session::clear();
-		return ['code'=>200,'message'=>'success'];
+		$this->returnData();
 	}
 
 	private function setSession($username)

@@ -13,15 +13,13 @@ class User extends Model
 	 */
 	public static function getLatelyTimeData( $p )
 	{
-		$data = self::getData($where, $p);
-		return ['code' => 200, 'data'=>$data];
+		return self::getData([], $p);
 	}
 
 	public static function getTpyeData( $type, $p)
 	{
 		$where['type_id'] = $type;
-		$data = self::getData($where, $p);
-		return ['code' => 200, 'data'=>$data];
+		return self::getData($where, $p);
 	}
 
 	private static function getData( $where, $p )
