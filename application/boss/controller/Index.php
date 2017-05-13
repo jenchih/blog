@@ -13,10 +13,10 @@ class Index extends Base
 		$name = input('name','');
 		$sort = input('sort', '');
 		$id   = input('id', 0);
-		if( empty($name) || $sort == '' ) 
+		if( empty($name) || !is_numeric($sort) || !is_numeric($id)  ) 
 		{
 			$this->code    = 400;
-			$this->message = 'error datas';
+			$this->message = '错误数据';
 			$this->returnData();
 		}
 
@@ -44,7 +44,22 @@ class Index extends Base
 
 	public function getTypeList()
 	{
-		$this->data = Db::table('article_type')->select();
+		$this->data = Db::table('article_type')->field('id,sorting `desc`,name,ctime time')->order('sorting desc')->select();
+		$this->returnData();
+	}
+
+	public function delType()
+	{
+		$id = input('tid', 0);
+		$id = intval($id);
+		$this->code    = 400;
+		$this->message = '错误数据';
+		
+		if( $id && Db::table('article_type')->where('id', $id)->delete() )
+		{
+			$this->code    = 200;
+			$this->message = '删除成功';
+		}
 		$this->returnData();
 	}
 
@@ -74,7 +89,8 @@ class Index extends Base
 		}
 		else
 		{
-			$data['ctime']   = date('Y-m-d H:i:s');
+			$data['ctime'] = date('Y-m-d H:i:s');
+			$data['aid']   = genUuid();
 			$res = Db::table('article')->insert( $data );
 		}
 
@@ -84,5 +100,10 @@ class Index extends Base
 			$this->message = '保存数据失败';
 		}
 		$this->returnData();
+	}
+
+	public function getArticleByid()
+	{
+		$aid = input('id','');
 	}
 }
