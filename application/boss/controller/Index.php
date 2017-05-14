@@ -67,9 +67,10 @@ class Index extends Base
 	{
 		$content = input('content','');
 		$typeid  = input('typeid', 0);
+		$title   = input('title', '');
 		$id      = input('id', 0);
 
-		if( empty($content) || empty($typeid) ) 
+		if( empty($content) || empty($typeid) || empty($title) ) 
 		{
 			$this->code    = 400;
 			$this->message = '数据验证错误';
@@ -80,6 +81,7 @@ class Index extends Base
 		$data            = [];
 		$data['content'] = $content;
 		$data['type_id'] = $typeid;
+		$data['title']   = $title;
 		$data['status']  = 1;
 		$data['utime']   = date('Y-m-d H:i:s');
 
@@ -104,6 +106,22 @@ class Index extends Base
 
 	public function getArticleByid()
 	{
-		$aid = input('id','');
+		$id = input('id','');
+		if( $data = Db::table('article')->find( $id ) )
+		{
+			$this->data = $data;
+		}
+		else
+		{
+			$this->code    = 404;
+			$this->message = 'error';
+		}
+		$this->returnData();
+	}
+
+	public function getArticleList()
+	{
+		$this->data = Db::table('article a')->field('a.id,a.aid,a.typeid,a.title,a.status,a.ctime,a.utime,t.name')->join('article_type t','a.typeid = t.id')->select();
+		$this->returnData();
 	}
 }
