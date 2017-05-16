@@ -6,6 +6,7 @@ class Index extends Base
 {
 	public function index()
 	{
+		echo 'hello world';
 	}
 
 	public function setType()
@@ -68,6 +69,7 @@ class Index extends Base
 		$content = input('content','');
 		$typeid  = input('typeid', 0);
 		$title   = input('title', '');
+		$status  = input('status', '');
 		$id      = input('id', 0);
 
 		if( empty($content) || empty($typeid) || empty($title) ) 
@@ -82,8 +84,8 @@ class Index extends Base
 		$data['content'] = $content;
 		$data['type_id'] = $typeid;
 		$data['title']   = $title;
-		$data['status']  = 1;
 		$data['utime']   = date('Y-m-d H:i:s');
+		$data['status']  = intval($status);
 
 		if( $id )
 		{
@@ -91,6 +93,7 @@ class Index extends Base
 		}
 		else
 		{
+			$data['status']  = 1;
 			$data['ctime'] = date('Y-m-d H:i:s');
 			$data['aid']   = genUuid();
 			$res = Db::table('article')->insert( $data );
@@ -121,7 +124,54 @@ class Index extends Base
 
 	public function getArticleList()
 	{
-		$this->data = Db::table('article a')->field('a.id,a.aid,a.typeid,a.title,a.status,a.ctime,a.utime,t.name')->join('article_type t','a.typeid = t.id')->select();
+		$p   = input('p', 1);
+		$aid = input('aid','');
+		$page_limit = 10;
+		$where = [];
+		if( !empty($aid) ) $where['aid'] = ['like',"%$aid%"];
+		$data['list'] =  Db::table('article a')->field('a.id,a.aid,a.type_id,a.title,a.status,a.ctime,a.utime,t.name')
+								->join('article_type t','a.type_id = t.id')
+								->where($where)
+								->limit(($p-1)*$page_limit, $page_limit)
+								->select();
+		$data['total'] = Db::table('article a')->field('a.id,a.aid,a.type_id,a.title,a.status,a.ctime,a.utime,t.name')
+								->join('article_type t','a.type_id = t.id')
+								->where($where)
+								->count();
+		$this->data = $data;
+		$this->returnData();
+	}
+
+	public function articleDel()
+	{
+		$id     = input('id','');
+		$status = input('status','');
+		$id     = intval($id);
+		$status = intval($status);
+		$this->message = Db::table('article')->where('id', $id)->update(['status'=>$status])?'修改成功':'更新失败';
+		$this->returnData();
+	}
+
+	public function editpwd()
+	{
+		$name   = input('name');
+		$oldpwd = input('oldpwd');
+		$newpwd = input('newpwd');
+
+		$passHashModel = new \app\boss\model\User;
+
+		$dbPwd = Db::table('admin')->where('username', $name)->value('password');
+		if( $passHashModel->check_password($dbPwd, config('pwd_cfg').$oldpwd)   )
+		{
+			$data = [];
+			$data['password'] = $passHashModel->hash( config('pwd_cfg').$newpwd );
+			Db::table('admin')->where('username', $name)->update($data);
+		}
+		else
+		{
+			$this->code = '400';
+			$this->message = '密码错误';
+		}
 		$this->returnData();
 	}
 }

@@ -26,7 +26,8 @@ class User extends \think\Controller
 			return $return;
 		}
 
-		if( $this->check_password($res['password'],config('pwd_cfg').$pwd) )
+		$passHashModel = new \app\boss\model\User;
+		if( $passHashModel->check_password($res['password'],config('pwd_cfg').$pwd) )
 		{
 			$return['code']    = 200;
 			$return['message'] = '登陆成功';
