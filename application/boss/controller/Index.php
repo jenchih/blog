@@ -18,7 +18,7 @@ class Index extends Base
 		{
 			$this->code    = 400;
 			$this->message = '错误数据';
-			$this->returnData();
+			return $this->returnData();
 		}
 
 		$data            = [];
@@ -40,13 +40,13 @@ class Index extends Base
 			$this->code    = 400;
 			$this->message = '保存数据失败';
 		}
-		$this->returnData();
+		return $this->returnData();
 	}
 
 	public function getTypeList()
 	{
 		$this->data = Db::table('article_type')->field('id,sorting `desc`,name,ctime time')->order('sorting desc')->select();
-		$this->returnData();
+		return $this->returnData();
 	}
 
 	public function delType()
@@ -61,7 +61,7 @@ class Index extends Base
 			$this->code    = 200;
 			$this->message = '删除成功';
 		}
-		$this->returnData();
+		return $this->returnData();
 	}
 
 	public function setArticle()
@@ -76,7 +76,7 @@ class Index extends Base
 		{
 			$this->code    = 400;
 			$this->message = '数据验证错误';
-			$this->returnData();
+			return $this->returnData();
 		}
 
 		// 添加数据
@@ -104,7 +104,7 @@ class Index extends Base
 			$this->code    = 400;
 			$this->message = '保存数据失败';
 		}
-		$this->returnData();
+		return $this->returnData();
 	}
 
 	public function getArticleByid()
@@ -119,7 +119,7 @@ class Index extends Base
 			$this->code    = 404;
 			$this->message = 'error';
 		}
-		$this->returnData();
+		return $this->returnData();
 	}
 
 	public function getArticleList()
@@ -139,7 +139,7 @@ class Index extends Base
 								->where($where)
 								->count();
 		$this->data = $data;
-		$this->returnData();
+		return $this->returnData();
 	}
 
 	public function articleDel()
@@ -149,7 +149,7 @@ class Index extends Base
 		$id     = intval($id);
 		$status = intval($status);
 		$this->message = Db::table('article')->where('id', $id)->update(['status'=>$status])?'修改成功':'更新失败';
-		$this->returnData();
+		return $this->returnData();
 	}
 
 	public function editpwd()
@@ -172,6 +172,6 @@ class Index extends Base
 			$this->code = '400';
 			$this->message = '密码错误';
 		}
-		$this->returnData();
+		return $this->returnData();
 	}
 }

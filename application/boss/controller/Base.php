@@ -11,21 +11,21 @@ class Base extends \think\Controller
 	{
 		config('default_return_type','json');
 		//暂时设置允许跨域
-		header("Access-Control-Allow-Origin: *");
-		header("Access-Control-Allow-Headers: x-requested-with,content-type");
-		header('Access-Control-Allow-Methods:POST,GET');
+		// header("Access-Control-Allow-Origin: *");
+		// header("Access-Control-Allow-Headers: x-requested-with,content-type");
+		// header('Access-Control-Allow-Methods:POST,GET');
 
-		// if( !session('username') )
-		// {
-		// 	$this->code    = 110;
-		// 	$this->message = 'have no login';
-		// }
-		// $this->returnData();
+		if( !session('username') )
+		{
+			$this->code    = 110;
+			$this->message = 'have no login';
+		}
+		$this->returnData();
 	}
 
 	public function returnData()
 	{
-		echo json_encode(['code'=>$this->code, 'message'=>$this->message, 'data' => $this->data]);die;
-		// return ['code'=>$this->code, 'message'=>$this->message, 'data' => $this->data];
+		#echo json_encode(['code'=>$this->code, 'message'=>$this->message, 'data' => $this->data]);die;
+		return ['code'=>$this->code, 'message'=>$this->message, 'data' => $this->data];
 	}
 }
