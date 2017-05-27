@@ -47,4 +47,9 @@ class User
 					->count();
 		return ['data'=>$data,'total'=>$total];
 	}
+
+	public function user_getDetail( $aid = '' )
+	{
+		return  Db::table('article')->where('aid', $aid)->find();
+	}
 }
