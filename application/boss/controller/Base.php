@@ -19,8 +19,10 @@ class Base extends \think\Controller
 		{
 			$this->code    = 110;
 			$this->message = 'have no login';
+			header('Content-Type: application/json');
+			header('Content-Type: text/html;charset=utf-8');
+			echo json_encode($this->returnData());die;
 		}
-		$this->returnData();
 	}
 
 	public function returnData()

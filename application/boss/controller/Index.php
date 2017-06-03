@@ -174,4 +174,41 @@ class Index extends Base
 		}
 		return $this->returnData();
 	}
+
+	public function getSystemConfig()
+	{
+		$this->data = Db::table('system_config')->select();
+		return $this->returnData();
+	}
+
+	public function updateConfig()
+	{
+		$id    = input('id', 0);
+		$name  = input('name','');
+		$value = input('value','');
+		if( empty($id) || empty($name) || empty($value) )
+		{
+			$this->code    = 400;
+			$this->message = '数据验证错误';
+			return $this->returnData();
+		}
+
+		if( Db::table('system_config')->find( $id ) )
+		{
+			$data['name']  = $name;
+			$data['value'] = $value;
+			$data['utime'] = date('Y-m-d H:i:s');
+			if( !Db::table('system_config')->where('id', $id)->update( $data ) )
+			{
+				$this->code    = 400;
+				$this->message = '未知错误';
+			}
+		}
+		else
+		{
+			$this->code    = 400;
+			$this->message = '未知错误';
+		}
+		return $this->returnData();
+	}
 }
