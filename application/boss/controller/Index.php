@@ -66,12 +66,12 @@ class Index extends Base
 
 	public function setArticle()
 	{
-		$content = input('content','');
-		$typeid  = input('typeid', 0);
-		$title   = input('title', '');
-		$status  = input('status', '');
-		$id      = input('id', 0);
-
+		$content  = input('content','');
+		$htmlCode = input('html','');
+		$typeid   = input('typeid', 0);
+		$title    = input('title', '');
+		$status   = input('status', '');
+		$id       = input('id', 0);
 		if( empty($content) || empty($typeid) || empty($title) ) 
 		{
 			$this->code    = 400;
@@ -82,6 +82,7 @@ class Index extends Base
 		// 添加数据
 		$data            = [];
 		$data['content'] = $content;
+		$data['html']    = $htmlCode;
 		$data['type_id'] = $typeid;
 		$data['title']   = $title;
 		$data['utime']   = date('Y-m-d H:i:s');

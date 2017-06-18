@@ -7,9 +7,9 @@ class User extends \think\Controller
 	public function _initialize()
 	{
 		config('default_return_type','json');
-		// header("Access-Control-Allow-Origin: *");
-		// header("Access-Control-Allow-Headers: x-requested-with,content-type");
-		// header('Access-Control-Allow-Methods: POST,GET');
+		header("Access-Control-Allow-Origin: *");
+		header("Access-Control-Allow-Headers: x-requested-with,content-type");
+		header('Access-Control-Allow-Methods: POST,GET');
 	}
 
 	public function loginvalid()
