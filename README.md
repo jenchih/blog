@@ -14,3 +14,7 @@ https://jenchih.cc   （国外服务器，加载略慢，勿喷）
 
 - coding [前端](https://coding.net/u/jenchih/p/vue/git)  [后台](https://coding.net/u/jenchih/p/blog/git)
 
+## 安装步骤
+	git clone xxx	// 把模板下载到本地
+	cd 	blog		               // 进入模板目录
+	composer install	// 安装项目依赖，等待安装完成之后
